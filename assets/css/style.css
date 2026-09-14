@@ -618,10 +618,10 @@ section{ position: relative; }
 
 .svc-tiers{ margin-top: var(--sp-4); }
 .svc-tiers-head{ font-family: var(--f-accent); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color: var(--text-muted); margin-bottom:1rem; }
-.tier-table{ width:100%; border-collapse:collapse; font-size:.86rem; }
+.tier-table{ width:100%; min-width:640px; border-collapse:collapse; font-size:.86rem; }
 .tier-table th{ text-align:left; font-family: var(--f-accent); font-weight:500; font-size:.66rem; letter-spacing:.08em; text-transform:uppercase; color: var(--text-muted); padding-bottom:.7rem; border-bottom:1px solid var(--line-strong); }
 .tier-table td{ padding:.6rem 0; border-bottom:1px solid var(--line); color: var(--text-body); }
-.tier-table td:not(:first-child), .tier-table th:not(:first-child){ text-align:right; font-family: var(--f-accent); color: var(--text-hi); }
+.tier-table td:not(:first-child), .tier-table th:not(:first-child){ text-align:right; font-family: var(--f-accent); color: var(--text-hi); white-space:nowrap; padding-left:1.2rem; }
 .tier-table tr:last-child td{ border-bottom:none; }
 .tier-scroll{ overflow-x:auto; padding-bottom:.4rem; }
 
@@ -813,7 +813,10 @@ section{ position: relative; }
 .float-cta a.primary{ background: linear-gradient(135deg, var(--violet-glow), var(--violet)); color:#140a1e; border-color:transparent; }
 .float-mobile-bar{ display:none; }
 @media (max-width:720px){
-  .float-cta{ right:1rem; bottom: calc(1rem + var(--mbar-h, 64px)); }
+  /* the bottom bar already covers both call + booking actions on mobile —
+     keeping the round floating buttons too just doubles up and hovers
+     over page content (review cards, price tables) as the user scrolls */
+  .float-cta{ display:none; }
   .float-mobile-bar{
     display:flex; position:fixed; inset-inline:0; bottom:0; z-index:95;
     background: rgba(21,19,27,.92); backdrop-filter: blur(10px);
