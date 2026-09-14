@@ -1,0 +1,9 @@
+# Source photos + build script (not needed to serve the site — only assets/img/opt/*.webp is referenced)
+assets/img/raw/
+assets/download.py
+assets/img/ids.txt
+assets/img/manifest.json
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
