@@ -139,17 +139,18 @@
 
   /* ---------------- Gallery ---------------- */
   const galGrid = document.getElementById('galGrid');
-  const rowSpan = (big) => big ? 30 : 22; // in grid-auto-rows(12px) units, tuned per aspect
+  // Row/column span (landscape tiles, "big" ones double-width) lives in
+  // CSS — see .gal-item / .gal-item.is-big — so it can vary per breakpoint.
 
   const imgSrc = (slug, w) => `assets/img/opt/${slug}-${w}.webp`;
 
   GALLERY.forEach((item, i) => {
     const fig = document.createElement('figure');
-    fig.className = 'gal-item';
+    fig.className = 'gal-item' + (item.big ? ' is-big' : '');
     fig.dataset.cat = item.cat;
-    fig.style.gridRowEnd = `span ${rowSpan(item.big)}`;
+    const sizes = item.big ? '(max-width:920px) 100vw, 50vw' : '(max-width:920px) 50vw, 25vw';
     fig.innerHTML = `
-      <img src="${imgSrc(item.slug, 600)}" srcset="${imgSrc(item.slug,600)} 600w, ${imgSrc(item.slug,1000)} 1000w" sizes="(max-width:920px) 50vw, 25vw" alt="${item.cap} — 4 Грани Лаб" loading="lazy">
+      <img src="${imgSrc(item.slug, 600)}" srcset="${imgSrc(item.slug,600)} 600w, ${imgSrc(item.slug,1000)} 1000w" sizes="${sizes}" alt="${item.cap} — 4 Грани Лаб" loading="lazy">
       <figcaption class="gal-cap">${item.cap}</figcaption>`;
     fig.addEventListener('click', () => openLightbox(i));
     galGrid.appendChild(fig);

@@ -103,7 +103,7 @@ img{ max-width:100%; display:block; }
 a{ color: inherit; text-decoration:none; }
 button{ font-family: inherit; }
 ul{ list-style:none; margin:0; padding:0; }
-h1,h2,h3,h4,p{ margin:0; }
+h1,h2,h3,h4,p,figure{ margin:0; }
 svg{ display:block; }
 
 ::selection{ background: var(--violet-deep); color: var(--text-hi); }
@@ -412,12 +412,29 @@ section{ position: relative; }
   line-height:.98;
   color: var(--text-hi);
   max-width: 18ch;
-  opacity:0; transform: translateY(22px);
 }
 .hero-title em{
   font-style:italic; font-weight:500;
   background: linear-gradient(100deg, var(--violet-glow), var(--rose) 60%, var(--gold-soft));
   -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+/* word-by-word reveal — each word slides up out of its own mask */
+.hero-title .word-mask{ display:inline-block; overflow:hidden; vertical-align:top; padding-bottom:.1em; margin-bottom:-.1em; }
+.hero-title .word{
+  display:inline-block;
+  transform: translateY(115%);
+  opacity:0;
+  filter: blur(6px);
+}
+.hero.is-ready .hero-title .word{
+  animation: hero-word-in 900ms var(--ease-out) forwards;
+  animation-delay: calc(200ms + var(--wi, 0) * 90ms);
+}
+@keyframes hero-word-in{
+  to{ transform: translateY(0); opacity:1; filter: blur(0); }
+}
+@media (prefers-reduced-motion: reduce){
+  .hero-title .word{ transform:none; opacity:1; filter:none; animation:none; }
 }
 .hero-sub{
   margin-top: var(--sp-3);
@@ -444,7 +461,6 @@ section{ position: relative; }
 .hero-facets a:hover .flabel{ color: var(--violet-glow); }
 
 .hero.is-ready .hero-badge,
-.hero.is-ready .hero-title,
 .hero.is-ready .hero-sub,
 .hero.is-ready .hero-cta,
 .hero.is-ready .hero-facets{
@@ -452,10 +468,9 @@ section{ position: relative; }
   transition: opacity 1s var(--ease-out), transform 1s var(--ease-out);
 }
 .hero.is-ready .hero-badge{ transition-delay:.05s; }
-.hero.is-ready .hero-title{ transition-delay:.18s; }
-.hero.is-ready .hero-sub{ transition-delay:.34s; }
-.hero.is-ready .hero-cta{ transition-delay:.48s; }
-.hero.is-ready .hero-facets{ transition-delay:.6s; }
+.hero.is-ready .hero-sub{ transition-delay:.6s; }
+.hero.is-ready .hero-cta{ transition-delay:.74s; }
+.hero.is-ready .hero-facets{ transition-delay:.86s; }
 
 .scroll-cue{
   position:absolute; right: var(--gutter); bottom: var(--sp-3); z-index:2;
@@ -628,6 +643,7 @@ section{ position: relative; }
 
 .gal-grid{
   display:grid; grid-template-columns: repeat(4, minmax(0,1fr));
+  grid-auto-flow: dense;
   grid-auto-rows: 12px;
   gap: 10px;
 }
@@ -637,6 +653,13 @@ section{ position: relative; }
   cursor: zoom-in;
   background: var(--bg-card);
 }
+/* landscape tiles: every cell is wider than it is tall — "big" ones
+   double their width (2 columns) rather than stretching taller.
+   Row-span lives here (not as a JS inline style) so it can be
+   re-tuned per breakpoint — a fixed pixel span would turn landscape
+   into portrait again once columns get narrower on smaller screens. */
+.gal-item{ grid-row: span 9; }
+.gal-item.is-big{ grid-column: span 2; grid-row: span 12; }
 .gal-item img{ width:100%; height:100%; object-fit:cover; transition: transform .7s var(--ease-out), filter .5s; }
 .gal-item:hover img{ transform: scale(1.08) rotate(-0.6deg); }
 .gal-cap{
@@ -649,7 +672,11 @@ section{ position: relative; }
 .gal-item:hover .gal-cap{ opacity:1; transform:none; }
 .gal-item[data-hidden]{ display:none; }
 
-@media (max-width:920px){ .gal-grid{ grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media (max-width:920px){
+  .gal-grid{ grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .gal-item{ grid-row: span 6; }
+  .gal-item.is-big{ grid-row: span 8; }
+}
 
 .gal-lightbox{
   position:fixed; inset:0; z-index:200; background: rgba(6,5,9,.94);
