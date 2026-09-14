@@ -7,3 +7,6 @@ assets/img/manifest.json
 # OS / editor cruft
 .DS_Store
 Thumbs.db
+
+.vercel
+.env*
